@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yesseneon/bookstore_users_api/utils/errors"
+	"github.com/yesseneon/bookstore_users_api/utils/cuserr"
 )
 
 type User struct {
@@ -16,11 +16,11 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (user *User) Validate() *errors.RESTError {
+func (user *User) Validate() *cuserr.RESTError {
 	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
 
 	if user.Email == "" {
-		return errors.BadRequest("Invalid email address")
+		return cuserr.BadRequest("Invalid email address")
 	}
 
 	return nil

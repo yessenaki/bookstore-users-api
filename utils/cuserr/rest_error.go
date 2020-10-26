@@ -1,4 +1,4 @@
-package errors
+package cuserr // custom errors
 
 import "net/http"
 
