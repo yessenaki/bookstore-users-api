@@ -26,31 +26,48 @@ func GetUser(id int) (*user.User, *cuserr.RESTError) {
 	return u, nil
 }
 
-func UpdateUser(u user.User, isPartial bool) (*user.User, *cuserr.RESTError) {
+func UpdateUser(u *user.User) (*user.User, *cuserr.RESTError) {
+	_, err := GetUser(u.ID) // existing user
+	if err != nil {
+		return nil, err
+	}
+
+	if err := u.Validate(); err != nil {
+		return nil, err
+	}
+
+	if err := u.Update(); err != nil {
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func PartUpdateUser(u *user.User) (*user.User, *cuserr.RESTError) {
 	eu, err := GetUser(u.ID) // existing user
 	if err != nil {
 		return nil, err
 	}
 
-	if isPartial == false {
-		eu.FirstName = u.FirstName
-		eu.LastName = u.LastName
-		eu.Email = u.Email
-	} else {
-		if u.FirstName != "" {
-			eu.FirstName = u.FirstName
-		}
-		if u.LastName != "" {
-			eu.LastName = u.LastName
-		}
-		if u.Email != "" {
-			eu.Email = u.Email
+	if u.Email != "" {
+		if err := u.Validate(); err != nil {
+			return nil, err
 		}
 	}
 
-	if err := eu.Update(); err != nil {
+	if err := eu.PartUpdate(u); err != nil {
 		return nil, err
 	}
 
 	return eu, nil
+}
+
+func DeleteUser(id int) *cuserr.RESTError {
+	_, err := GetUser(id) // existing user
+	if err != nil {
+		return err
+	}
+
+	u := &user.User{ID: id}
+	return u.Delete()
 }

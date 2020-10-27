@@ -29,9 +29,8 @@ func Create(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		restErr := cuserr.BadRequest("User ID must be a number")
+	id, restErr := getUserID(c.Param("id"))
+	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
@@ -46,14 +45,13 @@ func Get(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		restErr := cuserr.BadRequest("User ID must be a number")
+	id, restErr := getUserID(c.Param("id"))
+	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
 
-	var u user.User
+	var u *user.User
 	if err := c.ShouldBindJSON(&u); err != nil {
 		restErr := cuserr.BadRequest("Invalid JSON body")
 		c.JSON(restErr.Status, restErr)
@@ -61,11 +59,59 @@ func Update(c *gin.Context) {
 	}
 
 	u.ID = id
-	uu, restErr := services.UpdateUser(u, c.Request.Method == http.MethodPatch) // updated user
+	uu, restErr := services.UpdateUser(u) // updated user
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
 
 	c.JSON(http.StatusOK, uu)
+}
+
+func PartUpdate(c *gin.Context) {
+	id, restErr := getUserID(c.Param("id"))
+	if restErr != nil {
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	var u *user.User
+	if err := c.ShouldBindJSON(&u); err != nil {
+		restErr := cuserr.BadRequest("Invalid JSON body")
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	u.ID = id
+	uu, restErr := services.PartUpdateUser(u) // partially updated user
+	if restErr != nil {
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, uu)
+}
+
+func Delete(c *gin.Context) {
+	id, restErr := getUserID(c.Param("id"))
+	if restErr != nil {
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	if restErr := services.DeleteUser(id); restErr != nil {
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, struct{ Status string }{Status: "Deleted"})
+}
+
+func getUserID(paramID string) (int, *cuserr.RESTError) {
+	id, err := strconv.Atoi(paramID)
+	if err != nil {
+		return 0, cuserr.BadRequest("User ID must be a number")
+	}
+
+	return id, nil
 }

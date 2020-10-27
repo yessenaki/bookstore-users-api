@@ -51,3 +51,27 @@ func (u *User) Update() *cuserr.RESTError {
 
 	return nil
 }
+
+func (eu *User) PartUpdate(u *User) *cuserr.RESTError {
+	res := conn.DB.Model(&eu).Updates(u)
+	err := res.Error
+	if err != nil {
+		if strings.Contains(err.Error(), "users_email_key") {
+			return cuserr.BadRequest(fmt.Sprintf("Email %s already exists", u.Email))
+		}
+
+		return cuserr.InternalServerError(fmt.Sprintf("Error while trying to update user %d", u.ID))
+	}
+
+	return nil
+}
+
+func (u *User) Delete() *cuserr.RESTError {
+	res := conn.DB.Delete(&u)
+	err := res.Error
+	if err != nil {
+		return cuserr.InternalServerError(fmt.Sprintf("Error while trying to delete user %d", u.ID))
+	}
+
+	return nil
+}

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"regexp"
 	"strings"
 	"time"
 
@@ -16,10 +17,11 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (user *User) Validate() *cuserr.RESTError {
-	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
+func (u *User) Validate() *cuserr.RESTError {
+	u.Email = strings.TrimSpace(strings.ToLower(u.Email))
+	match := regexp.MustCompile(".+@.+\\..+").Match([]byte(u.Email))
 
-	if user.Email == "" {
+	if u.Email == "" || match == false {
 		return cuserr.BadRequest("Invalid email address")
 	}
 
