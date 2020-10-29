@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/yesseneon/bookstore_users_api/datasources/postgres/conn"
+	"github.com/yesseneon/bookstore_users_api/logger"
 	"github.com/yesseneon/bookstore_users_api/utils/errors"
 	"gorm.io/gorm"
 )
@@ -79,5 +80,6 @@ func getDBError(err error) *errors.RESTError {
 		return errors.BadRequest("This email address already exists")
 	}
 
+	logger.Error("Error while trying to execute sql query", err)
 	return errors.InternalServerError()
 }
