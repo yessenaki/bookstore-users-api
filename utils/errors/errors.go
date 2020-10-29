@@ -1,4 +1,4 @@
-package cuserr // custom errors
+package errors
 
 import "net/http"
 
@@ -16,17 +16,17 @@ func BadRequest(msg string) *RESTError {
 	}
 }
 
-func NotFound(msg string) *RESTError {
+func NotFound() *RESTError {
 	return &RESTError{
-		Message: msg,
+		Message: "No record(s) found",
 		Status:  http.StatusNotFound,
 		Error:   http.StatusText(404),
 	}
 }
 
-func InternalServerError(msg string) *RESTError {
+func InternalServerError() *RESTError {
 	return &RESTError{
-		Message: msg,
+		Message: "Sorry, something went wrong",
 		Status:  http.StatusInternalServerError,
 		Error:   http.StatusText(500),
 	}
