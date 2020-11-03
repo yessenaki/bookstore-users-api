@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yesseneon/bookstore_oauth_lib/oauth"
 	"github.com/yesseneon/bookstore_users_api/domain/user"
 	"github.com/yesseneon/bookstore_users_api/services"
 	"github.com/yesseneon/bookstore_users_api/utils/errors"
@@ -19,7 +20,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	u, restErr := services.CreateUser(u)
+	u, restErr := services.UserService.CreateUser(u)
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
@@ -29,7 +30,7 @@ func Create(c *gin.Context) {
 }
 
 func Find(c *gin.Context) {
-	users, restErr := services.FindUsers(c.Query("status"))
+	users, restErr := services.UserService.FindUsers(c.Query("status"))
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
@@ -44,19 +45,38 @@ func Find(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
+	if restErr := oauth.AuthenticateUser(c.Request); restErr != nil {
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	if callerID := oauth.GetCallerID(c.Request); callerID == 0 {
+		restErr := errors.RESTError{
+			Status:  http.StatusUnauthorized,
+			Message: "Resource not available",
+		}
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
 	id, restErr := getUserID(c.Param("id"))
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
 
-	u, restErr := services.GetUser(id)
+	u, restErr := services.UserService.GetUser(id)
 	if restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
 
-	c.JSON(http.StatusOK, u.Marshal(c.GetHeader("X-Public") == "true"))
+	if oauth.GetCallerID(c.Request) == u.ID {
+		c.JSON(http.StatusOK, u.Marshal(false))
+		return
+	}
+
+	c.JSON(http.StatusOK, u.Marshal(oauth.IsPublic(c.Request)))
 }
 
 func Update(c *gin.Context) {
@@ -75,9 +95,9 @@ func Update(c *gin.Context) {
 
 	u.ID = id
 	if c.Request.Method == http.MethodPatch {
-		u, restErr = services.PartUpdateUser(u)
+		u, restErr = services.UserService.PartUpdateUser(u)
 	} else {
-		u, restErr = services.UpdateUser(u)
+		u, restErr = services.UserService.UpdateUser(u)
 	}
 
 	if restErr != nil {
@@ -95,12 +115,29 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	if restErr := services.DeleteUser(id); restErr != nil {
+	if restErr := services.UserService.DeleteUser(id); restErr != nil {
 		c.JSON(restErr.Status, restErr)
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "deleted"})
+}
+
+func Login(c *gin.Context) {
+	var data user.LoginData
+	if err := c.ShouldBindJSON(&data); err != nil {
+		restErr := errors.BadRequest("Invalid JSON body")
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	u, restErr := services.UserService.LoginUser(data)
+	if restErr != nil {
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, u.Marshal(false))
 }
 
 func getUserID(paramID string) (int, *errors.RESTError) {

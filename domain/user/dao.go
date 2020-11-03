@@ -1,7 +1,7 @@
 package user
 
 import (
-	stderrors "errors"
+	goerrors "errors"
 	"strings"
 
 	"github.com/yesseneon/bookstore_users_api/datasources/postgres/conn"
@@ -71,8 +71,18 @@ func (u *User) Delete() *errors.RESTError {
 	return nil
 }
 
+func (u *User) FindByEmail() *errors.RESTError {
+	res := conn.DB.Where("email=? AND status=?", u.Email, StatusActive).First(&u)
+	err := res.Error
+	if err != nil {
+		return getDBError(err)
+	}
+
+	return nil
+}
+
 func getDBError(err error) *errors.RESTError {
-	if stderrors.Is(err, gorm.ErrRecordNotFound) {
+	if goerrors.Is(err, gorm.ErrRecordNotFound) {
 		return errors.NotFound()
 	}
 
