@@ -129,6 +129,8 @@ github.com/ugorji/go/codec v1.1.7/go.mod h1:Ax+UKWsSmolVDwsd+7N3ZtXu+yMGCf907BLY
 github.com/yesseneon/bookstore_oauth_lib v0.0.0-20201102123511-e905f83556af h1:Lwvwne3Fm2sacLG4b+fUYhujqqo0kNATq4c5WBXLnE4=
 github.com/yesseneon/bookstore_oauth_lib v0.0.0-20201102143506-f07294635701 h1:qRzd1sZLUaBx2l7DFvOjxA3X7Lg2tYIpt6rP8gjcekI=
 github.com/yesseneon/bookstore_oauth_lib v0.0.0-20201102143506-f07294635701/go.mod h1:Iy3WPZp3eQmOpciRbEA5lssczR+oFb5cBvhLAlqv0A8=
+github.com/yesseneon/bookstore_utils v0.0.0-20201103060333-f1875aba7fdc h1:DIVM1w4eHBrucUmFf8Z8lqderC2o/nVUP7hcF9KikHM=
+github.com/yesseneon/bookstore_utils v0.0.0-20201103060333-f1875aba7fdc/go.mod h1:hNFziYHIvfu2PgFhuAcstBTUSOkJjDFrbzvwKKWYBt4=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
 go.uber.org/atomic v1.3.2/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/atomic v1.4.0/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=

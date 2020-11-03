@@ -3,7 +3,7 @@ package services
 import (
 	"github.com/yesseneon/bookstore_users_api/domain/user"
 	"github.com/yesseneon/bookstore_users_api/utils/encryption"
-	"github.com/yesseneon/bookstore_users_api/utils/errors"
+	"github.com/yesseneon/bookstore_utils/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 

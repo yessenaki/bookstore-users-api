@@ -8,7 +8,7 @@ import (
 	"github.com/yesseneon/bookstore_oauth_lib/oauth"
 	"github.com/yesseneon/bookstore_users_api/domain/user"
 	"github.com/yesseneon/bookstore_users_api/services"
-	"github.com/yesseneon/bookstore_users_api/utils/errors"
+	"github.com/yesseneon/bookstore_utils/errors"
 )
 
 func Create(c *gin.Context) {

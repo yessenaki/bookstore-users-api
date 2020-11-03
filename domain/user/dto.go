@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yesseneon/bookstore_users_api/utils/errors"
+	"github.com/yesseneon/bookstore_utils/errors"
 )
 
 const (
