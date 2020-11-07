@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yesseneon/bookstore_oauth_lib/oauth"
-	"github.com/yesseneon/bookstore_users_api/domain/user"
-	"github.com/yesseneon/bookstore_users_api/services"
-	"github.com/yesseneon/bookstore_utils/errors"
+	"github.com/yesseneon/bookstore-oauth-lib/oauth"
+	"github.com/yesseneon/bookstore-users-api/domain/user"
+	"github.com/yesseneon/bookstore-users-api/services"
+	"github.com/yesseneon/bookstore-utils/errors"
 )
 
 func Create(c *gin.Context) {

@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/yesseneon/bookstore_users_api/domain/user"
-	"github.com/yesseneon/bookstore_users_api/utils/encryption"
-	"github.com/yesseneon/bookstore_utils/errors"
+	"github.com/yesseneon/bookstore-users-api/domain/user"
+	"github.com/yesseneon/bookstore-users-api/utils/encryption"
+	"github.com/yesseneon/bookstore-utils/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 

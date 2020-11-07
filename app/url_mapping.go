@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/yesseneon/bookstore_users_api/controllers/ping"
-	"github.com/yesseneon/bookstore_users_api/controllers/user"
+	"github.com/yesseneon/bookstore-users-api/controllers/ping"
+	"github.com/yesseneon/bookstore-users-api/controllers/user"
 )
 
 func mapUrls() {

@@ -2,8 +2,8 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/yesseneon/bookstore_users_api/datasources/postgres/conn"
-	"github.com/yesseneon/bookstore_users_api/migrations"
+	"github.com/yesseneon/bookstore-users-api/datasources/postgres/conn"
+	"github.com/yesseneon/bookstore-users-api/migrations"
 )
 
 var router = gin.Default()
